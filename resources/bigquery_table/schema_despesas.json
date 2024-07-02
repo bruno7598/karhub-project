@@ -1,0 +1,37 @@
+[
+    {
+      "name": "ID Fonte Recurso",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "Nome Fonte Recurso",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "Despesa",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "Liquidado",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "",
+      "fields": []
+    },
+    {
+      "name": "dt_insert",
+      "mode": "NULLABLE",
+      "type": "DATETIME",
+      "description": "",
+      "fields": []
+    }
+  ]

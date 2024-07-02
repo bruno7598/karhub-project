@@ -1,0 +1,26 @@
+prod:
+  csv_directory: /opt/airflow/dags/karhub-project/resources/csvs/
+  feather_directory: /opt/airflow/dags/karhub-project/resources/feather/
+  feather_directory_conformed: /opt/airflow/dags/karhub-project/resources/feather_conformed/
+
+  name_file_despesas: featherDespesas
+  name_file_receita: featherReceita
+  project_name: regal-state-348418
+  table_id_despesas: regal-state-348418.dataset_karhub.fonte_recursos_despesas
+  table_id_receita: regal-state-348418.dataset_karhub.fonte_recursos_receita
+
+  credentials: /opt/airflow/credentials/regal-state-348418-21234a5379b6.json
+  api_dollar: https://economia.awesomeapi.com.br/json/daily/USD-BRL?start_date=20220622&end_date=20220622
+dev:
+  csv_directory: /opt/airflow/dags/karhub-project/resources/csvs/
+  feather_directory: /opt/airflow/dags/karhub-project/resources/feather/
+  feather_directory_conformed: /opt/airflow/dags/karhub-project/resources/feather_conformed/
+
+  name_file_despesas: featherDespesas
+  name_file_receita: featherReceita
+  project_name: regal-state-348418
+  table_id_despesas: regal-state-348418.dataset_karhub.fonte_recursos_despesas
+  table_id_receita: regal-state-348418.dataset_karhub.fonte_recursos_receita
+
+  credentials: /opt/airflow/credentials/regal-state-348418-21234a5379b6.json
+  api_dollar: https://economia.awesomeapi.com.br/json/daily/USD-BRL?start_date=20220622&end_date=20220622

@@ -1,19 +1,21 @@
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from datetime import datetime
-import pandas as pd
+import sys
 import os
 
-csv_directory = '/opt/airflow/dags/karhub_project/resources/csvs/'
-feather_directory = '/opt/airflow/dags/karhub_project/resources/feather/'
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-def csv_to_feather(csv_filename):
-    csv_path = os.path.join(csv_directory, csv_filename)
-    feather_filename = os.path.splitext(csv_filename)[0] + '.feather'
-    feather_path = os.path.join(feather_directory, feather_filename)
-    
-    df = pd.read_csv(csv_path, encoding='latin1')
-    df.to_feather(feather_path)
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.python import PythonOperator
+from datetime import datetime
+from settings import Settings
+from routines.raw import Raw
+from routines.conformed import Conformed
+from routines.application import Application
+
+env = Variable.get('mode_deploy')
+
+settings = Settings()
+settings.set_env(env)
 
 default_args = {
     'owner': 'airflow',
@@ -23,24 +25,39 @@ default_args = {
 }
 
 dag = DAG(
-    'csv_to_feather_task',
+    'karhub_project',
     default_args=default_args,
     description='Task para ler CSV e salvar como Feather',
     schedule_interval=None,
 )
 
-csv_files = ['gdvDespesasExcel.csv', 'gdvReceitasExcel.csv'] 
+files = ['gdvDespesasExcel', 'gdvReceitasExcel']
 
-
-for csv_file in csv_files:
-    task_id = f'csv_to_feather_task_{csv_file.replace(".csv", "")}'
+for file in files:
+    task_id = f'csv_to_feather_task_raw_{file}'
     csv_to_feather_task = PythonOperator(
         task_id=task_id,
-        python_callable=csv_to_feather,
-        op_args=[csv_file],
+        python_callable=Raw().routine_raw,
+        op_args=[file],
         dag=dag,
     )
 
-csv_to_feather_task
+
+    read_feather_task = PythonOperator(
+        task_id=f'read_feather_task_conformed_{file}',
+        python_callable=Conformed().routines_conformed,
+        op_args=[file],
+        dag=dag,
+    )
+
+
+    insert_data_task = PythonOperator(
+        task_id=f'insert_data_task_application_{file}',
+        python_callable=Application().routines_application,
+        op_args=[file],
+        dag=dag,
+    )
+
+    csv_to_feather_task >> read_feather_task >> insert_data_task
 
 DAGS = [dag]
